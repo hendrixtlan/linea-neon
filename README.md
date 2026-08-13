@@ -98,6 +98,4 @@ En el panel *Edit* de la visualización:
 
 Cuando todo funcione, borra la línea del `console.log` de diagnóstico en `linea_neon.js`.
 
-## Licencia
 
-MIT — ver [LICENSE](LICENSE).
