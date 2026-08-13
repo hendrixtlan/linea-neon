@@ -15,8 +15,7 @@ Custom visualization para Looker: serie de datos con glow sobre fondo negro y l�
 ```
 linea-neon/
 ├── linea_neon.js   # la visualización completa
-├── README.md
-└── LICENSE
+└── README.md
 ```
 
 ## Requisitos del query
