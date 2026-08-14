@@ -138,6 +138,3 @@ Primera dimensión = categorías, primera medida = tamaño de la rebanada. Solo 
 
 La perspectiva distorsiona: las rebanadas del fondo se ven más pequeñas de lo que son. Para lectura precisa está el tooltip y la leyenda con el porcentaje exacto (y siempre puedes girar el pay). Si algún día el dashboard exige precisión por encima de espectáculo, un pay o dona 2D comunica mejor.
 
-## Licencia
-
-MIT — ver [LICENSE](LICENSE).
