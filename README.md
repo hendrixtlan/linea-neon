@@ -1,6 +1,6 @@
-# Línea Neón 🔴⚫
+# Neón Viz 🔴⚫
 
-Custom visualization para Looker: serie de datos con glow sobre fondo negro y línea de tendencia roja calculada por regresión lineal. Un solo archivo, sin dependencias externas (canvas puro).
+Custom visualizations para Looker con estética neón sobre fondo negro. Incluye dos visualizaciones: **Línea Neón** (serie con glow y línea de tendencia roja por regresión lineal; canvas puro, sin dependencias) y **Pay Neón 3D** (pay en 3D con three.js: la rebanada se eleva y brilla al pasar el puntero).
 
 ## Características
 
@@ -14,8 +14,10 @@ Custom visualization para Looker: serie de datos con glow sobre fondo negro y l�
 
 ```
 linea-neon/
-├── linea_neon.js   # la visualización completa
-└── README.md
+├── linea_neon.js     # línea con tendencia (canvas puro)
+├── pay_neon_3d.js    # pay 3D interactivo (requiere three.js)
+├── README.md
+└── LICENSE
 ```
 
 ## Requisitos del query
@@ -95,6 +97,47 @@ En el panel *Edit* de la visualización:
 - **Cambié el código y no pasa nada** → caché. Cambia el `?v=` de la URL, purga jsDelivr, o migra a la Opción A y olvídate del tema.
 - **Dimensión con nombres de mes ("Enero", "Febrero"…)** → el orden automático es numérico/alfabético, así que los nombres de mes quedarán en orden alfabético. Con dimensiones de fecha reales no hay problema: Looker entrega su `value` en formato ISO, que ordena correctamente.
 
-Cuando todo funcione, borra la línea del `console.log` de diagnóstico en `linea_neon.js`.
+- **"Falta three.js" en el tile (Pay Neón 3D)** → la dependencia no cargó: revisa la URL en `dependencies:` del manifest (o en el campo Dependencies del registro) y recarga con Ctrl+Shift+R.
 
+Cuando todo funcione, borra la línea del `console.log` de diagnóstico de cada archivo `.js`.
 
+## Pay Neón 3D 🥧
+
+Pay 3D construido con three.js. Al pasar el puntero por una rebanada (o por su entrada en la leyenda) **la rebanada se eleva** y aumenta su glow; el tooltip muestra valor y porcentaje; puedes **arrastrar para girar** el pay; un clic sobre la rebanada abre el **menú de drill** de Looker si la medida tiene links.
+
+### Registro
+
+Requiere three.js como dependencia — Looker la carga antes que la viz:
+
+```lookml
+visualization: {
+  id: "pay_neon_3d"
+  label: "Pay Neón 3D"
+  file: "pay_neon_3d.js"
+  dependencies: ["https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"]
+}
+```
+
+En la vía del panel de administración (Opción C), esa misma URL va en el campo **Dependencies**. Ambos bloques `visualization` (línea y pay) pueden convivir en el mismo `manifest.lkml`, cada uno con su `id`.
+
+### Requisitos del query
+
+Primera dimensión = categorías, primera medida = tamaño de la rebanada. Solo se grafican valores **positivos**; los `null` y negativos se descartan (queda constancia en el log `[pay_neon_3d]` de la consola). Si hay más categorías que el máximo configurado, las menores se agrupan en "Otros".
+
+### Opciones configurables
+
+| Opción | Default | Descripción |
+|---|---|---|
+| Color de fondo | `#000000` | Fondo de la escena |
+| Elevación al pasar el puntero | `10` | Cuánto sube la rebanada (unidades de escena) |
+| Máx. rebanadas | `12` | El resto se agrupa en "Otros" |
+| Rotación automática | activado | Gira lento; se pausa mientras interactúas |
+| Mostrar leyenda | activado | Leyenda interactiva: hover eleva la rebanada |
+
+### Nota honesta sobre pays 3D
+
+La perspectiva distorsiona: las rebanadas del fondo se ven más pequeñas de lo que son. Para lectura precisa está el tooltip y la leyenda con el porcentaje exacto (y siempre puedes girar el pay). Si algún día el dashboard exige precisión por encima de espectáculo, un pay o dona 2D comunica mejor.
+
+## Licencia
+
+MIT — ver [LICENSE](LICENSE).
